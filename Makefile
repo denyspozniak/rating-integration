@@ -1,34 +1,34 @@
-docker_compose_files = -f docker-compose.yaml -f docker-compose.carrier.yaml -f docker-compose.kamailio.yaml -f docker-compose.tester.yaml
+docker_compose_files = -f docker-compose.yaml -f docker-compose.carrier.yaml -f docker-compose.kamailio.yaml -f docker-compose.opensips.yaml -f docker-compose.tester.yaml
 
-.PHONY: venv
-venv:
+.PHONY: docs-venv
+docs-venv:
 	virtualenv -p python3 venv --no-site-packages
 
-.PHONY: setup
-setup:
+.PHONY: docs-setup
+docs-setup:
 	pip install -r requirements.txt
 
-.PHONY: docs
-docs:
+.PHONY: docs-serve
+docs-serve:
 	mkdocs serve
 
-.PHONY: deploy
-deploy:
+.PHONY: docs-deploy
+docs-deploy:
 	mkdocs gh-deploy
 
-.PHONY: start
-start:
+.PHONY: docker-start
+docker-start:
 	docker-compose $(docker_compose_files) up -d
 
-.PHONY: test
-test:
+.PHONY: docker-test
+docker-test:
 	docker exec rating-integration_tester_1 pytest /tests/
 
-.PHONY: logs
-logs:
+.PHONY: docker-logs
+docker-logs:
 	docker-compose $(docker_compose_files) ps -a
 	docker-compose $(docker_compose_files) logs
 
-.PHONY: stop
-stop:
+.PHONY: docker-stop
+docker-stop:
 	docker-compose $(docker_compose_files) down
